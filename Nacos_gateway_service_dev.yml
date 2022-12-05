@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedHeaders: '*'
+            allowedMethods: '*'
+            allowedOrigins: '*'
+      routes:
+        - id: path_route
+          uri: lb://user-service
+          predicates:
+            - Path=/user/get/{id}
