@@ -1,5 +1,17 @@
 server:
-  port: 80
+  port: 7001
 spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.199.128
+  application:
+    name: UserConsumer
   profiles:
     active: dev
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
