@@ -9,16 +9,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
 
+@LoadBalancerClients(defaultConfiguration = NacosLoadBalancerConfig.class)
+public class NacosLoadBalancerConfig {
+    @Resource
+    NacosDiscoveryProperties nacosDiscoveryProperties;
 
-
-public class MyLoadBalancerConfig {
     @Bean
-    ReactorLoadBalancer<ServiceInstance> randomLoadBalancer(Environment environment,
-                                                            LoadBalancerClientFactory loadBalancerClientFactory) {
+    public ReactorLoadBalancer<ServiceInstance> reactorServiceInstanceLoadBalancer(
+            Environment environment,
+            LoadBalancerClientFactory loadBalancerClientFactory) {
         String name = environment.getProperty(LoadBalancerClientFactory.PROPERTY_NAME);
-        // 随机轮询
-        return new RandomLoadBalancer(loadBalancerClientFactory
-                .getLazyProvider(name, ServiceInstanceListSupplier.class),
-                name);
+        return new NacosLoadBalancer(loadBalancerClientFactory
+                .getLazyProvider(name, ServiceInstanceListSupplier.class), name, nacosDiscoveryProperties);
     }
 }
