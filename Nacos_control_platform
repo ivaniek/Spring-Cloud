@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource 
+    driver-class-name: com.mysql.cj.jdbc.Driver 
+    url: jdbc:mysql://192.168.199.128:3306/cloud_learn?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root 
+    password: 123456 
+    druid:
+      initialSize: 10  
+      minIdle: 10       
+      maxActive: 100    
+      maxWait: 60000    
+      timeBetweenEvictionRunsMillis: 60000  
+      minEvictableIdleTimeMillis: 30000     
+      validationQuery: select 'x' 
+      testWhileIdle: true    
+      #通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat，日志用的filter:log4j，防御sql注入的filter:wall  
+      filters: stat,wall 
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: false 
+  cache:
+    type: redis
+  redis:
+    host: 192.168.199.128
+    port: 6379
+    password: 123456
+config:
+  info: This is Nacos config test
+
+dubbo:
+  application:
+    name: ${spring.application.name}
+    logger: slf4j
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://192.168.199.128:8848
+  config-center:
+    address: nacos://192.168.199.128:8848
+  metadata-report:
+    address: nacos://192.168.199.128:8848
+  consumer:
+    validation: true
+    timeout: 3000
+    check: false
+    loadbalance: roundrobin
+  scan:
+    base-packages: cuit.epoch.pymjl.controller
