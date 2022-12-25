@@ -3,12 +3,26 @@
 service-url：
   user-service: http://localhost:8081
   
-  spring:
+spring:
+  application:
+    name: gateway-demo # 服务名称
+  profiles:
+    active: dev
   cloud:
-    gateway:
-      routes:
-        - id: path_route
-          # uri: ${service-url.user-service}/user/get/{id}
-          uri: lb://user-service
-          predicates:
-            - Path=/user/get/{id}
+    nacos:
+      discovery:
+        server-addr: xx.xx.xx.xx:8848 # 注册中心地址  # 默认是没有密码的
+      config:
+        server-addr: xx.xx.xx.xx:8848  # config地址
+        file-extension: yaml # 指定配置文件类型
+      # 网关的配置
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true    
+      routes:
+        - id: member-server
+          uri: lb://member-server
+          predicates:
+            - Path=/query-demo/**
