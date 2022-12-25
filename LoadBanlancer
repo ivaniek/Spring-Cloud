@@ -1,0 +1,15 @@
+--pom.xml
+
+<dependency>
+ <groupId>org.springframework.cloud</groupId>
+ <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+</dependency>
+
+
+--实现负载均衡(RestTemplate)
+
+@Bean
+@LoadBalanced //负载均衡注解
+public RestTemplate restTemplate(){
+    return new RestTemplate();
+}
