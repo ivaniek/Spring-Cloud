@@ -1,0 +1,56 @@
+---application.yml
+
+
+# {spring.application.name}-{spring.profiles.active}.{spring.cloud.nacos.config.file-extension}
+# 实际访问的配置nacos-payment-provider.yaml
+    sentinel:
+      filter:
+        url-patterns: /**
+      transport:
+        #配置sentinel，dashboard地址
+        dashboard: 10.6.8.238:8858
+        #默认8719端口，假如被占用会自动从8719开始依次+1扫描，直至找到未被占用的端口
+        port: 8719
+        #clientIp: 10.7.0.25
+      # 下面为持久化到nacos
+      datasource:
+        # 这里的flow名字随便取   流控规则
+        flow:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            groupId: DEFAULT_GROUP
+            dataId: ${spring.application.name}-flow-rules
+            rule-type: flow
+            data-type: json
+        # 授权规则
+        authority:
+          nacos:
+            server-addr: ${spring.cloud.nacos.config.server-addr}
+            dataId: ${spring.application.name}-authority-rules
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: authority
+          # 降级规则
+          degrade:
+            nacos:
+              server-addr: ${spring.cloud.nacos.config.server-addr}
+              dataId: ${spring.application.name}-degrade-rules
+              groupId: DEFAULT_GROUP
+              data-type: json
+              rule-type: degrade
+          # 热点规则
+          param-flow:
+            nacos:
+              server-addr: ${spring.cloud.nacos.config.server-addr}
+              dataId: ${spring.application.name}-param-flow-rules
+              groupId: DEFAULT_GROUP
+              data-type: json
+              rule-type: param-flow
+          # 系统规则
+          system:
+            nacos:
+              server-addr: ${spring.cloud.nacos.config.server-addr}
+              dataId: ${spring.application.name}-system-rules
+              groupId: DEFAULT_GROUP
+              data-type: json
+              rule-type: system
